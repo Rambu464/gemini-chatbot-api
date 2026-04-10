@@ -1,4 +1,4 @@
-# Gemini Chatbot API
+# Skill Advisor Chatbot
 
 This project is intended as a final assignment for the **AI Productivity and AI API Integration for Developers** by **Hacktiv8**.
 
@@ -9,6 +9,7 @@ This repository contains a simple Chatbot API implementation using **Express.js*
 * **Runtime:** Node.js with Express.
 * **Security:** Environment variable support via `dotenv`.
 * **Flexibility:** CORS enabled for cross-origin access.
+* * **User Interface:** Simple website.
 
 ## 🛠️ Prerequisites
 Before starting, ensure you have installed:
