@@ -9,14 +9,11 @@ chatForm.addEventListener("submit", async (e) => {
   const userText = userInput.value.trim();
   if (!userText) return;
 
-  // Add user message to conversation and display
   conversation.push({ role: "user", text: userText });
   displayMessage("user", userText);
 
-  // Clear input
   userInput.value = "";
 
-  // Show thinking message
   const thinkingDiv = displayMessage("bot", "Thinking...");
   thinkingDiv.classList.add("thinking");
 
@@ -35,27 +32,38 @@ chatForm.addEventListener("submit", async (e) => {
 
     const data = await response.json();
     if (data.result) {
-      // Add model response to conversation
       conversation.push({ role: "model", text: data.result });
-      // Replace thinking with actual response
-      thinkingDiv.textContent = data.result;
+      thinkingDiv.innerHTML = formatResponseText(data.result);
       thinkingDiv.classList.remove("thinking");
     } else {
       throw new Error("Sorry, no response received.");
     }
   } catch (error) {
-    // Replace thinking with error message
     thinkingDiv.textContent = error.message;
     thinkingDiv.classList.remove("thinking");
     thinkingDiv.classList.add("error");
   }
 });
 
+function escapeHtml(text) {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function formatResponseText(text) {
+  const safeText = escapeHtml(String(text || ""));
+  return safeText.replace(/\r\n/g, "\n").replace(/\n/g, "<br>");
+}
+
 function displayMessage(role, text) {
   const messageDiv = document.createElement("div");
   messageDiv.className = `message ${role}`;
-  messageDiv.textContent = text;
+  messageDiv.innerHTML = formatResponseText(text);
   chatBox.appendChild(messageDiv);
-  chatBox.scrollTop = chatBox.scrollHeight; // Auto-scroll to bottom
+  chatBox.scrollTop = chatBox.scrollHeight;
   return messageDiv;
 }
