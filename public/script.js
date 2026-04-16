@@ -56,7 +56,19 @@ function escapeHtml(text) {
 
 function formatResponseText(text) {
   const safeText = escapeHtml(String(text || ""));
-  return safeText.replace(/\r\n/g, "\n").replace(/\n/g, "<br>");
+
+  const formattedText = safeText
+    // Bold markdown **text** or __text__
+    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+    .replace(/__(.+?)__/g, "<strong>$1</strong>")
+    // Italic markdown *text* or _text_
+    .replace(/\*(.+?)\*/g, "<em>$1</em>")
+    .replace(/_(.+?)_/g, "<em>$1</em>")
+    // Preserve line breaks
+    .replace(/\r\n/g, "\n")
+    .replace(/\n/g, "<br>");
+
+  return formattedText;
 }
 
 function displayMessage(role, text) {
